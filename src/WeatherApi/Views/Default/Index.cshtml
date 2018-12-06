@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Väderappen</title>
+</head>
+<body>
+    <input type="text" name="id" id="searchString" placeholder="Skriv in postnummer eller stad" />
+
+    <input id="button" type="submit" value="Hämta" class="btn btn-default" />
+    <pre id="demo"></pre>
+
+    <script>
+        document.getElementById("button").addEventListener("click", restCaller);
+
+        function restCaller() {
+            var searchText = document.getElementById("searchString").value;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var jsonResponse = JSON.parse(this.responseText);
+                    document.getElementById("demo").innerHTML = JSON.stringify(jsonResponse, undefined, 2);
+                }
+                if (this.status == 404)
+                {
+                    document.getElementById("demo").innerHTML = "inget resultat"
+                }
+            };
+            xhttp.open('GET', 'api/Weather/' + searchText, true); 
+            xhttp.send();
+        }
+    </script>
+
+</body>
+</html>
